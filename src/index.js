@@ -1,6 +1,6 @@
 require('dotenv/config');
 
-const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
+const { Client, IntentsBitField, ActivityType } = require('discord.js');
 
 // CLIENT = BOT.. INITIALIZE CLIENT
 const client = new Client({
@@ -13,40 +13,31 @@ const client = new Client({
 	],
 });
 
+let status = [
+	{
+		name: 'God',
+		type: ActivityType.Playing,
+	},
+	{
+		name: 'My Minions',
+		type: ActivityType.Watching,
+	},
+	{
+		name: 'You',
+		type: ActivityType.Watching,
+	},
+];
+
 // EVENT LISTENERS
 
 // bot on when ready will console log the bot's user name is online
 client.on('ready', (c) => {
 	console.log(`✅ ${c.user.username} is online! `);
+
+	setInterval(() => {
+		let random = Math.floor(Math.random() * status.length);
+		client.user.setActivity(status[random]);
+	}, 10000);
 });
-
-client.on('interactionCreate', async (interaction) => {
-	try {
-		if (!interaction.isButton()) return;
-		await interaction.deferReply({ ephemeral: true });
-
-		const role = interaction.guild.roles.cache.get(interaction.customId);
-		if (!role) {
-			interaction.editReply({
-				content: "I couldn't find that role",
-			});
-			return;
-		}
-
-		const hasRole = interaction.member.roles.cache.has(role.id);
-
-		if (hasRole) {
-			await interaction.member.roles.remove(role);
-			await interaction.editReply(`The role ${role} has been removed.`);
-			return;
-		}
-
-		await interaction.member.roles.add(role);
-		await interaction.editReply(`The role ${role} has been added.`);
-	} catch (error) {
-		console.log(error);
-	}
-});
-
 
 client.login(process.env.TOKEN);
