@@ -1,6 +1,7 @@
 require('dotenv/config');
 
 const { Client, IntentsBitField, ActivityType } = require('discord.js');
+const eventHandlers = require('./handlers/eventHandlers');
 
 // CLIENT = BOT.. INITIALIZE CLIENT
 const client = new Client({
@@ -13,31 +14,8 @@ const client = new Client({
 	],
 });
 
-let status = [
-	{
-		name: 'God',
-		type: ActivityType.Playing,
-	},
-	{
-		name: 'My Minions',
-		type: ActivityType.Watching,
-	},
-	{
-		name: 'You',
-		type: ActivityType.Watching,
-	},
-];
 
-// EVENT LISTENERS
-
-// bot on when ready will console log the bot's user name is online
-client.on('ready', (c) => {
-	console.log(`✅ ${c.user.username} is online! `);
-
-	setInterval(() => {
-		let random = Math.floor(Math.random() * status.length);
-		client.user.setActivity(status[random]);
-	}, 10000);
-});
+// CALLS TO /handlers/eventHandlers
+eventHandlers(client);
 
 client.login(process.env.TOKEN);
