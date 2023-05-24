@@ -1,6 +1,6 @@
 require('dotenv/config');
 
-const { Client, IntentsBitField, ActivityType } = require('discord.js');
+const { Client, IntentsBitField } = require('discord.js');
 const eventHandlers = require('./handlers/eventHandlers');
 
 // CLIENT = BOT.. INITIALIZE CLIENT
